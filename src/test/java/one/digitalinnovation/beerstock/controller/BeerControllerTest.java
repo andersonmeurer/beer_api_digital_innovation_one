@@ -1,11 +1,16 @@
 package one.digitalinnovation.beerstock.controller;
 
-import one.digitalinnovation.beerstock.builder.BeerDTOBuilder;
-import one.digitalinnovation.beerstock.dto.BeerDTO;
-import one.digitalinnovation.beerstock.dto.QuantityDTO;
-import one.digitalinnovation.beerstock.exception.BeerNotFoundException;
-import one.digitalinnovation.beerstock.exception.BeerStockExceededException;
-import one.digitalinnovation.beerstock.service.BeerService;
+import static one.digitalinnovation.beerstock.utils.JsonConvertionUtils.asJsonString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Collections;
+
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,17 +24,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import java.util.Collections;
-
-import static one.digitalinnovation.beerstock.utils.JsonConvertionUtils.asJsonString;
-import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-import static org.springframework.mock.http.server.reactive.MockServerHttpRequest.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import one.digitalinnovation.beerstock.builder.BeerDTOBuilder;
+import one.digitalinnovation.beerstock.dto.BeerDTO;
+import one.digitalinnovation.beerstock.dto.QuantityDTO;
+import one.digitalinnovation.beerstock.exception.BeerNotFoundException;
+import one.digitalinnovation.beerstock.service.BeerService;
 
 @ExtendWith(MockitoExtension.class)
 public class BeerControllerTest {
@@ -69,9 +68,9 @@ public class BeerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(beerDTO)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name", is(beerDTO.getName())))
-                .andExpect(jsonPath("$.brand", is(beerDTO.getBrand())))
-                .andExpect(jsonPath("$.type", is(beerDTO.getType().toString())));
+                .andExpect(jsonPath("$.name", Matchers.is(beerDTO.getName())))
+                .andExpect(jsonPath("$.brand", Matchers.is(beerDTO.getBrand())))
+                .andExpect(jsonPath("$.type", Matchers.is(beerDTO.getType().toString())));
     }
 
     @Test
@@ -99,9 +98,9 @@ public class BeerControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(BEER_API_URL_PATH + "/" + beerDTO.getName())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is(beerDTO.getName())))
-                .andExpect(jsonPath("$.brand", is(beerDTO.getBrand())))
-                .andExpect(jsonPath("$.type", is(beerDTO.getType().toString())));
+                .andExpect(jsonPath("$.name", Matchers.is(beerDTO.getName())))
+                .andExpect(jsonPath("$.brand", Matchers.is(beerDTO.getBrand())))
+                .andExpect(jsonPath("$.type", Matchers.is(beerDTO.getType().toString())));
     }
 
     @Test
@@ -130,9 +129,9 @@ public class BeerControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(BEER_API_URL_PATH)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name", is(beerDTO.getName())))
-                .andExpect(jsonPath("$[0].brand", is(beerDTO.getBrand())))
-                .andExpect(jsonPath("$[0].type", is(beerDTO.getType().toString())));
+                .andExpect(jsonPath("$[0].name", Matchers.is(beerDTO.getName())))
+                .andExpect(jsonPath("$[0].brand", Matchers.is(beerDTO.getBrand())))
+                .andExpect(jsonPath("$[0].type", Matchers.is(beerDTO.getType().toString())));
     }
 
     @Test
@@ -188,10 +187,10 @@ public class BeerControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.patch(BEER_API_URL_PATH + "/" + VALID_BEER_ID + BEER_API_SUBPATH_INCREMENT_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(quantityDTO))).andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is(beerDTO.getName())))
-                .andExpect(jsonPath("$.brand", is(beerDTO.getBrand())))
-                .andExpect(jsonPath("$.type", is(beerDTO.getType().toString())))
-                .andExpect(jsonPath("$.quantity", is(beerDTO.getQuantity())));
+                .andExpect(jsonPath("$.name", Matchers.is(beerDTO.getName())))
+                .andExpect(jsonPath("$.brand", Matchers.is(beerDTO.getBrand())))
+                .andExpect(jsonPath("$.type", Matchers.is(beerDTO.getType().toString())))
+                .andExpect(jsonPath("$.quantity", Matchers.is(beerDTO.getQuantity())));
     }
 
 //    @Test

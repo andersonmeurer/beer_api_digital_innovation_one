@@ -1,5 +1,27 @@
 package one.digitalinnovation.beerstock.service;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.not;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import one.digitalinnovation.beerstock.builder.BeerDTOBuilder;
 import one.digitalinnovation.beerstock.dto.BeerDTO;
 import one.digitalinnovation.beerstock.entity.Beer;
@@ -8,34 +30,6 @@ import one.digitalinnovation.beerstock.exception.BeerNotFoundException;
 import one.digitalinnovation.beerstock.exception.BeerStockExceededException;
 import one.digitalinnovation.beerstock.mapper.BeerMapper;
 import one.digitalinnovation.beerstock.repository.BeerRepository;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.lessThan;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class BeerServiceTest {
@@ -63,9 +57,9 @@ public class BeerServiceTest {
         //then
         BeerDTO createdBeerDTO = beerService.createBeer(expectedBeerDTO);
 
-        assertThat(createdBeerDTO.getId(), is(equalTo(expectedBeerDTO.getId())));
-        assertThat(createdBeerDTO.getName(), is(equalTo(expectedBeerDTO.getName())));
-        assertThat(createdBeerDTO.getQuantity(), is(equalTo(expectedBeerDTO.getQuantity())));
+        assertThat(createdBeerDTO.getId(), Matchers.is(equalTo(expectedBeerDTO.getId())));
+        assertThat(createdBeerDTO.getName(), Matchers.is(equalTo(expectedBeerDTO.getName())));
+        assertThat(createdBeerDTO.getQuantity(), Matchers.is(equalTo(expectedBeerDTO.getQuantity())));
     }
 
     @Test
@@ -93,7 +87,7 @@ public class BeerServiceTest {
         // then
         BeerDTO foundBeerDTO = beerService.findByName(expectedFoundBeerDTO.getName());
 
-        assertThat(foundBeerDTO, is(equalTo(expectedFoundBeerDTO)));
+        assertThat(foundBeerDTO, Matchers.is(equalTo(expectedFoundBeerDTO)));
     }
 
     @Test
@@ -120,8 +114,8 @@ public class BeerServiceTest {
         //then
         List<BeerDTO> foundListBeersDTO = beerService.listAll();
 
-        assertThat(foundListBeersDTO, is(not(empty())));
-        assertThat(foundListBeersDTO.get(0), is(equalTo(expectedFoundBeerDTO)));
+        assertThat(foundListBeersDTO, Matchers.is(not(empty())));
+        assertThat(foundListBeersDTO.get(0), Matchers.is(equalTo(expectedFoundBeerDTO)));
     }
 
     @Test
@@ -132,7 +126,7 @@ public class BeerServiceTest {
         //then
         List<BeerDTO> foundListBeersDTO = beerService.listAll();
 
-        assertThat(foundListBeersDTO, is(empty()));
+        assertThat(foundListBeersDTO, Matchers.is(empty()));
     }
 
     @Test
